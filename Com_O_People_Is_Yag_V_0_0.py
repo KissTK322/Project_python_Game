@@ -3,7 +3,8 @@ import time
 
 menu_options = ['Start Game', 'Load Game', 'Save Game', 'Quit']
 
-Dialog_kla = ["บังกล้าชะล่าใจ : ยินดีต้อนรับเข้าสู่เมืองแห่งคอมโอที่มีแต่พวก yag!" , "บังกล้าชะล่าใจ : เอ้ย! ไม่ใช่ที่นี่มีแต่สุภาพชนที่พร้อมจะพูดคำว่า \"คุณ\" กับ \"Kub\" "]
+Dialog_kla = ["บังกล้าชะล่าใจ : ยินดีต้อนรับเข้าสู่เมืองแห่งคอมโอที่มีแต่พวก yag!" , "บังกล้าชะล่าใจ : เอ้ย! ไม่ใช่ที่นี่มีแต่สุภาพชนที่พร้อมจะพูดคำว่า \"คุณ\" กับ \"Kub\" " , "บังกล้าชะล่าใจ : คุณคืออัศวินผู้กล้าหาญที่มีนามแฝงว่าเวย์เลสเตอร์..." , "บังกล้าชะล่าใจ : "]
+len_kla = len(Dialog_kla) 
 kla = 0
 
 # Define the default game data
@@ -59,28 +60,24 @@ def load_game_data():
         pass
     return game_data
 
+def kla_dialog(stdscr, kla):
+    stdscr.addstr(len_kla + 2, 0, "Press Enter to continue...")
+    while kla != len_kla:
+        key = stdscr.getch()
+        if key == curses.KEY_ENTER or key in [10, 13]:
+            kla += 1
+        else:
+            stdscr.addstr(kla, 0, Dialog_kla[kla])
+            time.sleep(0.25)
+
 def main(stdscr):
-
-    # Load game data from file
     game_data = load_game_data()
-
-    # Set up the screen
     curses.curs_set(0)
     stdscr.nodelay(True)
     stdscr.timeout(100)
-    len_kla = len(Dialog_kla) 
     kla = 0
-    while(kla != len_kla) :
-            key = stdscr.getch()
-            if(key == curses.KEY_ENTER or key in [10, 13]) :
-                kla += 1
-            else :
-                stdscr.addstr(kla , 0, Dialog_kla[kla])
-                stdscr.addstr(len_kla + 1, 0, "กด Enter ซะจะได้พูดต่อซักที Kub")
-                time.sleep(0.35)
-
+    kla_dialog(stdscr , kla)
     while True:
-        #print("บังกล้าชะล่าใจ")
         # Draw the main menu and get user input
         menu_option, game_data = handle_menu_input(stdscr, game_data)
 
